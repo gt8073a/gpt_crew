@@ -34,8 +34,8 @@ These fields are very limited in size, so you have to pick your Starting Crew
 You can always expand your Crew as you go.
 
 There are three easy ways to do it:
-1. Copy a new Crew member line into your customization field during setup.
+1. Copy a new Crew member definition into your customization field during setup.
 2. Upload a .md file with temporary member definitions into the current chat.
-3. Use /crew maker to create a temporary member for the current chat.
+3. Use `/crew maker` to create a temporary member for the current chat.
 
 Temporary members will stay active for the chat session, but won’t appear in future chats.
