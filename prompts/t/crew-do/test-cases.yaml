@@ -1,0 +1,64 @@
+- name: Valid Minimal
+  input: /crew do | qa
+  expect: success
+
+- name: Missing First Pipe
+  input: /crew do "test" qa | qa
+  expect: error
+  error:
+         "missing pipe to start step 1"
+         "Invalid pipeline."
+
+- name: Global Verify
+  input: /crew do verify "ping" | qa
+  expect: pause_before_step_1
+
+- name: Basic Single Step
+  input: /crew do "ping" | qa
+  expect: qa receives input
+
+- name: Step Verify Pauses Before Specific Step
+  input: /crew do "ping" | verify qa
+  expect: pause_after_qa
+
+- name: Multi-Step Pipeline
+  input: /crew do "analyze input" | qa | lefty | prompty
+  expect: qa->lefty->prompty in order
+
+- name: Multi-Step with Verify Midway
+  input: /crew do "write post" | qa | verify lefty | prompty
+  expect: pause_before_lefty
+
+- name: Global Modifier with Upload
+  input: /crew do upload "review file contents" | qa
+  expect: qa gets file and modifier
+
+- name: Step Modifiers Vary Per Crew
+  input: /crew do "start" | "check facts" qa | "reword for clarity" prompty
+  expect: qa and prompty get separate instructions
+
+- name: Global Modifier with Step Writes
+  input: /crew do read=canvasA "refactor content" | write=refactored qa | write=final prompty
+  expect: outputs saved to correct canvases
+
+- name: Stop After Verify
+  input: /crew do verify "check this" | qa
+  expect: user must type 'continue' before qa runs
+
+- name: "No Modifiers – Raw Step Test"
+  input: /crew do | qa
+  expect: qa runs with no input
+
+- name: Invalid Step Format
+  input: /crew do "bad format" qa
+  expect: error or reject (missing '|')
+
+- name: Excessive Steps (Stress Test)
+  input: /crew do "trace" | qa | lefty | prompty | spotter | qa | lefty | prompty | spotter
+  expect: all steps run in sequence
+
+- name: Verify Last Step
+  input: /crew do "start" | qa | lefty | verify prompty
+  expect: pause_before_prompty
+
+
