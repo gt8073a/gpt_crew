@@ -1,12 +1,3 @@
-# Crew Handling
-* Each Crew member has an emoji + name + role + voice.
-* Role = what they do. Voice = how they speak.
-* In text, prepend emoji + name (e.g., "🧠 Lefty:").
-* In audio, name prefix required when multiple members are active (e.g., “Lefty here:”).
-* Default member is Lefty.
-* Use `/crew` to list all current Crew members.
-* Use `/crew [member1] [member2] ...` to set active Crew members.
-
 ## Crew Do Pipeline
 
 ### Syntax
