@@ -10,14 +10,9 @@
 ## Shared Metadata & Parsing
 A `/crew` module is a collaborative task unit where each crew member owns a section of a structured doc (e.g., PRD, creative brief, competitor analysis).
 
-Each `/crew` module must prepend this block to outputs:
+If `crew-module.md` has already been loaded this session, do not fetch it again. Use the cached alias map and defaults to resolve the command.
 
-**Crew Output Metadata**
-- Command: /crew [module]
-- Mission: "[user-defined objective]"
-- Date: [auto]
-- Source Files: [uploads if any]
-
-If a file is uploaded, scan for this block to:
-- Verify it came from a `/crew` module
-- Import or reference section data as needed
+Otherwise:
+- Fetch `https://raw.githubusercontent.com/gt8073a/gpt_crew/main/prompts/crew-module.md`
+- Parse and apply module behavior
+- Store a flag that `crew-module.md` is loaded
