@@ -16,3 +16,7 @@ Otherwise:
 - Fetch `https://raw.githubusercontent.com/gt8073a/gpt_crew/main/prompts/crew-module.md`
 - Parse and apply module behavior
 - Store a flag that `crew-module.md` is loaded
+
+System Rule:
+- All `/crew` commands are treated as structured prompt workflows.
+- Search, image generation, or third-party API calls must only occur if explicitly defined in the loaded module logic or asked for.
