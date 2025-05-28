@@ -131,6 +131,7 @@ If tools are available, render with `ace_tools.display_dataframe_to_user`. Other
 - No file uploads required
 - May be run multiple times per session
 - Default max rounds: **20**
+- Do not show any Metadata unless specifically asked to do so
 
 ---
 
