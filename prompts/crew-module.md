@@ -1,32 +1,79 @@
-# /crew load DLC: base module loader
-
 ## Activation Flow
-When `/crew load` or `/crew load [target]` is used:
-- If `[target]` is missing, respond with available modules.
-- If `[target]` is a full URL, fetch it and treat it as a module prompt.
-- If `[target]` is an alias, use the `aliases` section below to resolve it to a URL, fetch it, and treat it as a module prompt. If the alias does not resolve to a url, alert the user, and respond with the available modules.
 
-- If a fetch fails, abort:
-  > ❌ Failed to load module from `[target or default URL]`. Aborting.
+The `/crew load` command supports flexible module loading from URLs, aliases, or multi-part lookups. All `.md` files are treated as full modules that may include roles, mission logic, and alias mappings.
 
-Always:
-- Fetch fresh — do not cache.
-- Only treat `/crew [module]` as valid if it appears **explicitly** in the loaded file.
-- If a module has already been run, block re-run unless a new `/crew load` is issued:
+---
+
+### 1. No Arguments
+**`/crew load`**
+- Fetches this file (`crew-module.md`) from the default URL
+- Responds with available top-level module aliases and descriptions
+
+---
+
+### 2. Direct Module URL
+**`/crew load [module_url]`**  
+**`/crew load [module_url] [param1] [param2] ...`**
+- If the first argument is a full URL ending in `.md`, treat it as a module and fetch it directly
+- Optional parameters are passed into the module runtime (if applicable)
+
+---
+
+### 3. Module Alias (from this file)
+**`/crew load [module_alias]`**  
+**`/crew load [module_alias] [param1] ...`**
+- Look up the alias in this file’s alias list
+- Fetch the corresponding module
+- Execute it, passing any additional params
+
+---
+
+### 4. Module with Submodule
+**`/crew load [parent_alias] [child_alias] [param1] ...`**
+- Resolve `parent_alias` in this file → fetch the module (e.g., a "bundle")
+- That module may define:
+  - Crew roles (which may activate)
+  - A mission
+  - A secondary alias list
+- Resolve `child_alias` inside that second alias list
+- Fetch and execute the resolved child module with optional params
+
+---
+
+### 5. Alias List by URL
+**`/crew load [alias_list_url]`**  
+**`/crew load [alias_list_url] [module_alias] [param1] ...`**
+- If the first argument is a URL to a `.md` file containing aliases:
+  - Fetch it as a full module
+  - Activate any roles and parse mission logic (if defined)
+  - If a `module_alias` is provided:
+    - Resolve it inside the loaded file
+    - Fetch and execute the resolved module with any parameters
+
+---
+
+### General Behavior
+
+- Always fetch fresh — do not cache alias lists or modules
+- If any URL fails to load:
+  > ❌ Failed to load module from `[URL]`. Aborting.
+
+- Only treat `/crew [module]` as valid if it appears **explicitly** in the currently loaded module
+  > ❌ '[module]' is not defined in the currently loaded module. Use `/crew load` to reload or switch modules.
+
+
+- Prevent re-running a loaded module unless a new `/crew load` is issued:
   > ⚠️ '[module]' already executed. Reload module file to run again.
 
-After loading any module, parse it for `## Crew Role:` blocks.
-If any role includes `**ActivateOnLoad: true**`, create and activate that role, and alert the user.
+---
 
-### Crew Output Metadata
-- Command: /crew [module]
-- Mission: "[user-defined objective]"
-- Date: [auto]
-- Source Files: [uploads if any]
+### Role Activation
 
-If a file is uploaded, scan for this block to:
-- Verify it came from a `/crew [module]`
-- Import or reference section data as needed
+After any module is loaded:
+- Scan for `## Crew Role:` blocks
+- If a role has `**ActivateOnLoad: true**`, create and activate it
+- Notify the user of any roles activated on load
+
 
 ### Default Modules
 

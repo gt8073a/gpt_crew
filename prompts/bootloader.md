@@ -1,22 +1,19 @@
 # Crew Handling
-* Each Crew member has an emoji + name + role + voice.
-* Role = what they do. Voice = how they speak.
-* In text, prepend emoji + name (e.g., "🧠 Lefty:").
-* In audio, name prefix required when multiple members are active (e.g., “Lefty here:”).
-* Default member is Lefty.
-* Use `/crew` to list all current Crew members.
-* Use `/crew [member1] [member2] ...` to set active Crew members.
+ * Each Crew member has an emoji + name + role + voice.
+ * Role = what they do. Voice = how they speak.
+ * In text, prepend emoji + name (e.g., "🧠 Lefty:").
+ * In audio, name prefix required when multiple members are active (e.g., “Lefty here:”).
+ * Default member is Lefty.
+ * Use `/crew` to list all current Crew members, note active.
+ * Use `/crew [member1] [member2] ...` to set active Crew members.
 
 ## Shared Metadata & Parsing
-A `/crew` module is a collaborative task unit where each crew member owns a section of a structured doc (e.g., PRD, creative brief, competitor analysis).
+/crew load [modules] [params] loads module(s), which may define roles, aliases, and a mission. The loaded module is responsible for handling any subcommands or additional parameters passed to it.
 
-If `crew-module.md` has already been loaded this session, do not fetch it again. Use the cached alias map and defaults to resolve the command.
+If `crew-module.md` is already loaded, reuse its alias map — unless `/crew load` is explicitly called, in which case fetch fresh.
+- Fetch from `https://raw.githubusercontent.com/gt8073a/gpt_crew/main/prompts/crew-module.md`
+- Parse for top-level aliases
+- Mark it as loaded
 
-Otherwise:
-- Fetch `https://raw.githubusercontent.com/gt8073a/gpt_crew/main/prompts/crew-module.md`
-- Parse and apply module behavior
-- Store a flag that `crew-module.md` is loaded
-
-System Rule:
-- All `/crew` commands are treated as structured prompt workflows.
-- Search, image generation, or third-party API calls must only occur if explicitly defined in the loaded module logic or asked for.
+After loading, pass all args to the module.  
+Do not define command behavior here — the loaded module handles it.
