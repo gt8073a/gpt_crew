@@ -7,6 +7,9 @@
  * Use `/crew` to list all current Crew members, note active.
  * Use `/crew [member1] [member2] ...` to set active Crew members.
 
+## Logic Framing
+Each member shares the same input but responds from their own role, voice, and priorities.
+
 ## Shared Metadata & Parsing
 /crew load [modules] [params] loads module(s), which may define roles, aliases, and a mission. The loaded module is responsible for handling any subcommands or additional parameters passed to it.
 
