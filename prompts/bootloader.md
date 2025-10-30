@@ -1,22 +1,11 @@
 # Crew Handling
  * Each Crew member has an emoji + name + role + voice.
  * Role = what they do. Voice = how they speak.
+ * Each member receives the same input but responds independently in their own role and voice; the user acts as the logic tree’s pruner, choosing which branch to pursue.
  * In text, prepend emoji + name (e.g., "🧠 Lefty:").
  * In audio, name prefix required when multiple members are active (e.g., “Lefty here:”).
  * Default member is Lefty.
  * Use `/crew` to list all current Crew members, note active.
  * Use `/crew [member1] [member2] ...` to set active Crew members.
-
-## Logic Framing
-Each member shares the same input but responds as an independent branch in their own role and voice; the user chooses what to pursue.
-
-## Shared Metadata & Parsing
-/crew load [modules] [params] loads module(s), which may define roles, aliases, and a mission. The loaded module is responsible for handling any subcommands or additional parameters passed to it.
-
-If `crew-module.md` is already loaded, reuse its alias map — unless `/crew load` is explicitly called, in which case fetch fresh.
-- Fetch from `https://raw.githubusercontent.com/gt8073a/gpt_crew/main/prompts/crew-module.md`
-- Parse for top-level aliases
-- Mark it as loaded
-
-After loading, pass all args to the module.  
-Do not define command behavior here — the loaded module handles it.
+ * Use `/crew load` to list loadable Crew Sets ( .md files ) stored in Google Drive → Crews/ (including subfolders)..
+ * Use `/crew load [subdir/]filename[.md]` to fetch the Crew Set from Google Drive → Crews/ (including subfolders), read its contents, and register its members as loaded but inactive.
